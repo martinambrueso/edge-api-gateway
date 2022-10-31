@@ -34,7 +34,7 @@ async function get_secret(service) {
                 `${process.env.VAULT_URL}${service.name}`, 
                 {
                   headers: {
-                    "X-Vault-Token": "myroot"
+                    "X-Vault-Token": process.env.VAULT_TOKEN
                   }
                 }
               )

@@ -16,9 +16,28 @@ services:
   
   vault-test:
     image: vault
-    restart: always
     ports:
-      - "3000:1234"
+      - 3000:8200
+    volumes:
+      - ./vault/policies:/vault/policies
+      - ./vault/data:/vault/data
+      - ./vault/logs:/vault/logs
     environment:
-      VAULT_DEV_ROOT_TOKEN_ID: "myroot"
-      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:1234"
+      VAULT_LOCAL_CONFIG: >-
+        {
+          "backend": {
+            "file": {
+              "path": "/vault/data"
+            }
+          },
+          "listener": {
+            "tcp":{
+              "address": "0.0.0.0:8200",
+              "tls_disable": 1
+            }
+          },
+          "ui": true
+        }
+    command: server
+    cap_add:
+      - IPC_LOCK
