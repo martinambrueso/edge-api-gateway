@@ -8,7 +8,13 @@ require('dotenv').config()
 
 app.use(express.json());
 
-mongoose.connect(process.env.DATABASE_URL);
+mongoose.connect(process.env.DATABASE_URL, {
+    authSource: "admin",
+    user: "root",
+    pass: "example",
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 const database = mongoose.connection;
 
 database.on('error', (error) => {
