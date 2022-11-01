@@ -1,14 +1,7 @@
 const Service = require('./models/model');
 const mongoose = require('mongoose');
 require('dotenv').config()
-
-mongoose.connect(process.env.DATABASE_URL, {
-    authSource: "admin",
-    user: process.env.MONGO_USER,
-    pass: process.env.MONGO_PASSWORD,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+require('./db');
 
 Service.createCollection().then(function (collection) {
     console.log('Collection is created!');
