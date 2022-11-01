@@ -26,6 +26,6 @@ const Service = mongoose.model('Service', {
         required: true,
         type: String
     }
-}, 'myCollection')
+})
 
 module.exports = Service

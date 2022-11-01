@@ -10,8 +10,8 @@ app.use(express.json());
 
 mongoose.connect(process.env.DATABASE_URL, {
     authSource: "admin",
-    user: "root",
-    pass: "example",
+    user: process.env.MONGO_USER,
+    pass: process.env.MONGO_PASSWORD,
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
