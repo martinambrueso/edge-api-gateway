@@ -5,27 +5,9 @@ const https = require('https');
 const mongoose = require('mongoose');
 const Service = require('./models/model');
 require('dotenv').config()
+require('./db');
 
 app.use(express.json());
-
-mongoose.connect(process.env.DATABASE_URL, {
-    authSource: "admin",
-    user: process.env.MONGO_USER,
-    pass: process.env.MONGO_PASSWORD,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
-const database = mongoose.connection;
-
-database.on('error', (error) => {
-    console.log(error)
-})
-
-database.once('connected', () => {
-    console.log('Database Connected');
-})
-
-const model = new Service();
 
 async function get_secret(service) {
     if (service.need_auth === true) {
