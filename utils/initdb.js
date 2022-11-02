@@ -1,7 +1,7 @@
 const Service = require('../models/model');
 const mongoose = require('mongoose');
 require('dotenv').config()
-require('../db');
+require('../db/db');
 
 Service.createCollection().then(function (collection) {
     console.log('Collection is created!');

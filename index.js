@@ -5,7 +5,7 @@ const https = require('https');
 const mongoose = require('mongoose');
 const Service = require('./models/model');
 require('dotenv').config()
-require('./db');
+require('./db/db');
 
 app.use(express.json());
 
