@@ -12,7 +12,7 @@ npm install
 
 Inicializar db:
 ```bash
-node .\initdb.js
+node .\utils\initdb.js
 ```
 
 Correr app:
