@@ -28,7 +28,7 @@ function init(){
 async function main(){
     const init_data = await init();
 
-    console.log(init_data.token);
+    console.log(init_data);
 
     setTimeout(async() => {       
         await axios({

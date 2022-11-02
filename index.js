@@ -57,6 +57,8 @@ app.all('/:service/*', async(req, res) => {
         }).then((response) => {
             res.setHeader('Content-Type', 'application/json');
             response.data.pipe(res)
+        }).catch((error) => {
+            console.log(error);
         })
     } else {
         res.status(400).send({error: 'Secret not found'});
