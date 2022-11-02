@@ -55,22 +55,6 @@ async function main(){
             console.log(error);
         }); 
 
-        console.log(init_data.token)
-
-        await axios.post('http://127.0.0.1:3000/v1/kv/data/github', {
-            headers: {
-                'X-Vault-Token': init_data.token,
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify({
-                "data": {
-                    "token": "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"
-                },
-                "options": {},
-                "version": 0
-            })
-        })
-
     }, 5000);
 }
 
