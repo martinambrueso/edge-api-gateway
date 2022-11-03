@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Service = require('./models/model');
 require('dotenv').config()
 require('./db/db');
+const vault = require("./init.json")
 
 app.use(express.json());
 
@@ -16,7 +17,7 @@ async function get_secret(service) {
                 `${process.env.VAULT_URL}${service.name}`, 
                 {
                   headers: {
-                    "X-Vault-Token": process.env.VAULT_TOKEN
+                    "X-Vault-Token": vault.root_token
                   }
                 }
               )
@@ -42,7 +43,7 @@ app.all('/:service/*', async(req, res) => {
     const service = await get_service(req.params.service);
     const secret = await get_secret(service);
 
-    if (secret.error !== true) {
+    if (secret.error !== true && service.error !== true) {
         axios({
             method: req.method,
             url: `${service.url}${req.url.split('/').slice(2).join('/')}`,
@@ -61,7 +62,7 @@ app.all('/:service/*', async(req, res) => {
             console.log(error);
         })
     } else {
-        res.status(400).send({error: 'Secret not found'});
+        res.status(400).send({error: 'Secret or service not found'});
     }
 });
 

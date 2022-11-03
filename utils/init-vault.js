@@ -1,5 +1,6 @@
 const axios = require("axios");
 const https = require('https');
+const fs = require('fs');
 
 
 var options = {
@@ -14,12 +15,19 @@ var vault = require("node-vault")(options);
 
 function init(){
     return vault.init({ secret_shares: 1, secret_threshold: 1 }).then((result) => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             var keys = result.keys;
             vault.token = result.root_token;
         
             vault.unseal({ secret_shares: 1, key: keys[0] })
-        
+
+            // create json file with result object
+
+            await fs.writeFile('init.json', JSON.stringify(result), function (err) {
+                if (err) throw err;
+                console.log('Saved!');
+            });
+
             resolve({ keys, token: result.root_token });
         })
     })

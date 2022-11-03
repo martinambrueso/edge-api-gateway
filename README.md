@@ -1,5 +1,15 @@
 # edge-api-gateway
 
+# Diagrama general
+
+![general.png.jpg](/img/general.png)
+
+# Edge API Gateway
+
+![edge_api_gw.png.jpg](/img/edge_api_gw.png)
+
+# Inicializacion
+
 Montar imagenes:
 ```bash
 docker-compose up --build
@@ -26,14 +36,6 @@ Correr app:
 ```bash
 npm start
 ```
-
-# Diagrama general
-
-![general.png.jpg](/img/general.png)
-
-# Edge API Gateway
-
-![edge_api_gw.png.jpg](/img/edge_api_gw.png)
 
 # Uso
 

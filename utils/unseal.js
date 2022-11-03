@@ -1,9 +1,8 @@
 const axios = require("axios");
 require('dotenv').config()
+const vault = require("../init.json");
 
-const keys = [
-    '8425d322d28e2b811a8cdab53ebf6500029cf8c4a568eb0f09fcd65aaf93459e'
-]
+const keys = vault.keys;
 
 keys.forEach(key => {
     var data = JSON.stringify({
