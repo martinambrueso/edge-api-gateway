@@ -34,3 +34,14 @@ npm start
 # Edge API Gateway
 
 ![edge_api_gw.png.jpg](/img/edge_api_gw.png)
+
+# Uso
+
+```bash
+curl -X [GET/POST/PUT/DELTE ...] \
+    http://localhost:3000/<service>/path/to/endpouint?some=param \
+    -H "Content-Type: application/json" \
+    --data '{ \
+        "some":"data" \
+    }'
+```
