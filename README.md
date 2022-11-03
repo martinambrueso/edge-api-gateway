@@ -49,3 +49,24 @@ curl -X [GET/POST/PUT/DELTE ...] \
         "some":"data" \
     }'
 ```
+
+Ejemplo real:
+```bash
+curl -X GET http://localhost:3000/github/user/repos -H "Content-Type: application/json"
+```
+
+Response:
+```json
+[
+  {
+    "id": 336916526,
+    "node_id": "MDEwOlJlcG9zaXRvcnkzMzY5MTY1MjY=",
+    "name": "CloudSecurityMELIChallenge",
+    "full_name": "martinambrueso/CloudSecurityMELIChallenge",
+    "private": false,
+    "owner": {
+      "login": "martinambrueso",
+      ...
+      ..
+      .
+```
