@@ -41,6 +41,10 @@ npm start
 curl -X [GET/POST/PUT/DELTE ...] \
     http://localhost:3000/<service>/path/to/endpouint?some=param \
     -H "Content-Type: application/json" \
+    -H "X-SOME-HEADER: some-value" \
+    ...
+    ..
+    .
     --data '{ \
         "some":"data" \
     }'
