@@ -49,9 +49,9 @@ app.all('/:service/*', async(req, res) => {
             headers: {
                 'Authorization': service.auth.replace('#data#', secret)
             },
-            data: req.body,
-            responseType: 'stream',
-            httpsAgent: new https.Agent({
+            data            : req.body,
+            responseType    : 'stream',
+            httpsAgent      : new https.Agent({
                 rejectUnauthorized: false
             })
         }).then((response) => {

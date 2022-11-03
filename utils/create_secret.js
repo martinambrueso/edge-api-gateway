@@ -4,7 +4,7 @@ require('dotenv').config('../.env')
 
 var data = JSON.stringify({
   "data": {
-    "token": "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"
+    "token": "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"
   },
   "options": {},
   "version": 0
@@ -12,7 +12,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: 'http://127.0.0.1:3000/v1/kv/data/tes2',
+  url: 'http://127.0.0.1:3000/v1/kv/data/github',
   headers: { 
     'X-Vault-Token': process.env.VAULT_TOKEN,
     'Content-Type': 'application/json'
