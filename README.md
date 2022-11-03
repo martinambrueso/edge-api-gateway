@@ -39,7 +39,7 @@ npm start
 
 ```bash
 curl -X [GET/POST/PUT/DELTE ...] \
-    http://localhost:3000/<service>/path/to/endpouint?some=param&foo=baar \
+    http://localhost:3000/<service>/path/to/endpoint?some=param&foo=baar \
     -H "Content-Type: application/json" \
     -H "X-SOME-HEADER: some-value" \
     ...
