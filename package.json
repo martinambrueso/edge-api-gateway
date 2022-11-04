@@ -19,7 +19,7 @@
     "fetch": "^1.1.0",
     "mongodb": "^4.11.0",
     "mongoose": "^6.7.0",
-    "node-fetch": "2.0",
+    "node-fetch": "^2.6.7",
     "node-vault": "^0.9.22",
     "nodemon": "^2.0.20"
   }

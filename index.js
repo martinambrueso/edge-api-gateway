@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 const https = require('https');
-const mongoose = require('mongoose');
 const Service = require('./models/model');
+const vault = require("./init.json")
+const fetch = require('node-fetch');
 require('dotenv').config()
 require('./db/db');
-const vault = require("./init.json")
-const fetchUrl = require('fetch').fetchUrl;
+
 app.use(express.json());
 
 async function get_secret(service) {
@@ -44,16 +44,26 @@ app.all('/:service/*', async(req, res) => {
     const secret = await get_secret(service);
 
     if (secret.error !== true && service.error !== true) {
-        fetchUrl(`${service.url}${req.url.split('/').slice(2).join('/')}`, {
+        var options = {
             method: req.method,
             headers: {
-                "Authorization": service.auth.replace("#data#", secret)
+                'Authorization': `Bearer ${secret}`,
+                'Content-Type': 'application/json'
             },
-            payload: JSON.stringify(req.body)
-        }, (error, meta, body) => {
-            console.log(meta.responseHeaders);
-            res.status(meta.status).send(body.toString());
-        });
+            agent: new https.Agent({
+                rejectUnauthorized: false
+            })
+        }
+        if (req.method !== "GET" && req.method !== "DELETE" && req.method !== "HEAD" && req.method !== "OPTIONS") {
+            options.body = JSON.stringify(req.body);
+        }
+        fetch(`${service.url}${req.url.split('/').slice(2).join('/')}`, options)
+        .then(response => {
+            return {status: response.status, body: response.json()}
+        })
+        .then(async data => {
+            res.status(data.status).send(await data.body)
+        })
     } else {
         res.status(400).send({error: 'Secret or service not found'});
     }
