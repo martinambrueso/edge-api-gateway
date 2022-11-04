@@ -47,10 +47,7 @@ app.all('/:service/*', async(req, res) => {
         fetchUrl(`${service.url}${req.url.split('/').slice(2).join('/')}`, {
             method: req.method,
             headers: {
-                "Authorization": service.auth.replace("#data#", secret),
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "accept-encoding": "gzip, deflate, br"
+                "Authorization": service.auth.replace("#data#", secret)
             },
             payload: JSON.stringify(req.body)
         }, (error, meta, body) => {
