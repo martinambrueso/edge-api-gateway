@@ -7,7 +7,7 @@ const Service = require('./models/model');
 require('dotenv').config()
 require('./db/db');
 const vault = require("./init.json")
-
+const fetchUrl = require('fetch').fetchUrl;
 app.use(express.json());
 
 async function get_secret(service) {
@@ -44,23 +44,18 @@ app.all('/:service/*', async(req, res) => {
     const secret = await get_secret(service);
 
     if (secret.error !== true && service.error !== true) {
-        axios({
+        fetchUrl(`${service.url}${req.url.split('/').slice(2).join('/')}`, {
             method: req.method,
-            url: `${service.url}${req.url.split('/').slice(2).join('/')}`,
             headers: {
-                'Authorization': service.auth.replace('#data#', secret)
+                "Authorization": service.auth.replace("#data#", secret),
+                "Accept": "application/json",
+                "Content-Type": "application/json"
             },
-            data            : req.body,
-            responseType    : 'stream',
-            httpsAgent      : new https.Agent({
-                rejectUnauthorized: false
-            })
-        }).then((response) => {
+            payload: JSON.stringify(req.body)
+        }, function(error, meta, body){
             res.setHeader('Content-Type', 'application/json');
-            response.data.pipe(res)
-        }).catch((error) => {
-            console.log(error);
-        })
+            res.status(meta.status).send(body.toString());
+        });
     } else {
         res.status(400).send({error: 'Secret or service not found'});
     }

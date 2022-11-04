@@ -4,7 +4,7 @@ const secret = require('../init.json');
 
 var data = JSON.stringify({
   "data": {
-    "token": "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"
+    "token": "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"
   },
   "options": {},
   "version": 0
