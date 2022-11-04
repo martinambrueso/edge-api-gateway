@@ -49,11 +49,12 @@ app.all('/:service/*', async(req, res) => {
             headers: {
                 "Authorization": service.auth.replace("#data#", secret),
                 "Accept": "application/json",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "accept-encoding": "gzip, deflate, br"
             },
             payload: JSON.stringify(req.body)
-        }, function(error, meta, body){
-            res.setHeader('Content-Type', 'application/json');
+        }, (error, meta, body) => {
+            console.log(meta.responseHeaders);
             res.status(meta.status).send(body.toString());
         });
     } else {
