@@ -37,6 +37,16 @@ Service.insertMany([
         "headers": {
             "Accept": "application/json"
         }
+    },
+    {
+        "need_auth": false,
+        "id": "301c86b8-f931-41de-a6b7-3d4987552883",
+        "name": "reqres",
+        "url": "https://jsonplaceholder.typicode.com/users'",
+        "auth": "token #data#",
+        "headers": {
+            "Accept": "application/json"
+        }
     }
 ])
 
