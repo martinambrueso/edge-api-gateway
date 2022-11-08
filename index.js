@@ -48,7 +48,9 @@ app.all('/:service/*', async(req, res) => {
             method: req.method,
             headers: {
                 'Authorization': `Bearer ${secret}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept-Encoding': 'encoding/gzip,deflate',
+                'Accept': 'application/json'
             },
             agent: new https.Agent({
                 rejectUnauthorized: false
@@ -58,10 +60,16 @@ app.all('/:service/*', async(req, res) => {
             options.body = JSON.stringify(req.body);
         }
         fetch(`${service.url}${req.url.split('/').slice(2).join('/')}`, options)
-        .then(response => {
-            return {status: response.status, body: response.json()}
+        .then(response => {           
+            return {status: response.status, body: response.json(), headers: response.headers};
         })
         .then(async data => {
+            res.set(Object.fromEntries(data.headers));
+            res.oldWriteHead = res.writeHead;
+            res.writeHead = function(statusCode, reasonPhrase, headers) {
+                res.header('transfer-encoding', ''); // <-- add this line
+                res.oldWriteHead(statusCode, reasonPhrase, headers);
+            }
             res.status(data.status).send(await data.body)
         })
     } else {
