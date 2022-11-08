@@ -64,10 +64,8 @@ app.all('/:service/*', async(req, res) => {
         })
         .then(async data => {
             res.set(Object.fromEntries(data.headers));
-            res.oldWriteHead = res.writeHead;
-            res.writeHead = function(statusCode, reasonPhrase, headers) {
-                res.header('transfer-encoding', ''); // <-- add this line
-                res.oldWriteHead(statusCode, reasonPhrase, headers);
+            if (data.headers.has('transfer-encoding')) {
+                res.header('transfer-encoding', '');
             }
             res.status(data.status).send(await data.body)
         })
