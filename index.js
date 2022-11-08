@@ -49,8 +49,7 @@ app.all('/:service/*', async(req, res) => {
             headers: {
                 'Authorization': `Bearer ${secret}`,
                 'Content-Type': 'application/json',
-                'Accept-Encoding': 'encoding/gzip,deflate',
-                'Accept': 'application/json'
+                'Accept-Encoding': '*'
             },
             agent: new https.Agent({
                 rejectUnauthorized: false
