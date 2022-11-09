@@ -47,9 +47,9 @@ app.all('/:service/*', async(req, res) => {
         var options = {
             method: req.method,
             headers: {
-                'Authorization': `Bearer ${secret}`,
-                'Content-Type': 'application/json',
-                'Accept-Encoding': '*'
+                'Authorization': service.auth.replace("#data#", secret),
+                'Content-Type': '*/*',
+                'Accept-Encoding': '*/*'
             },
             agent: new https.Agent({
                 rejectUnauthorized: false
