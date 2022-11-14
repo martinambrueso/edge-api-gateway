@@ -1,79 +1,82 @@
 const express = require('express');
 const app = express();
 const axios = require('axios');
-const https = require('https');
 const Service = require('./models/model');
 const vault = require("./init.json")
-const fetch = require('node-fetch');
+const console = require('console');
 require('dotenv').config()
 require('./db/db');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
-app.use(express.json());
+(async () => {
+    
+    async function get_secret(service) {
+        if (service.need_auth === true) {
+            try {
+                const secret = await axios.get(
+                    `${process.env.VAULT_URL}${service.name}`, 
+                    {
+                    headers: {
+                        "X-Vault-Token": vault.root_token
+                    }
+                    }
+                )
+                return secret.data.data.data.token;
+            } catch (error) {
+                return {error: true, message: error}
+            }
+        } else {
+            return "No auth needed"
+        }
+    }
 
-async function get_secret(service) {
-    if (service.need_auth === true) {
-        try {
-            const secret = await axios.get(
-                `${process.env.VAULT_URL}${service.name}`, 
-                {
-                  headers: {
-                    "X-Vault-Token": vault.root_token
-                  }
-                }
-              )
-            return secret.data.data.data.token;
+    async function get_services() {
+        try{
+            const data = await Service.find();
+            return data;
         } catch (error) {
             return {error: true, message: error}
         }
-    } else {
-        return "No auth needed"
     }
-}
 
-async function get_service(service) {
-    try{
-        const data = await Service.findOne({name: service});
-        return data;
-    } catch (error) {
-        return {error: true, message: error}
-    }
-}
-
-app.all('/:service/*', async(req, res) => {
-    const service = await get_service(req.params.service);
-    const secret = await get_secret(service);
-
-    if (secret.error !== true && service.error !== true) {
-        var options = {
-            method: req.method,
-            headers: {
-                'Authorization': `Bearer ${secret}`,
-                'Content-Type': 'application/json',
-                'Accept-Encoding': '*'
-            },
-            agent: new https.Agent({
-                rejectUnauthorized: false
+    const service = await get_services()
+    
+    service.forEach(async service => {
+        const secret = await get_secret(service)
+        console.log(secret)
+        app.use(
+            `/${service.name}`,
+            createProxyMiddleware({
+                secure: false,
+                target: service.url,
+                changeOrigin: true,
+                pathRewrite: {
+                    [`^/${service.name}`]: '',
+                },
+                onProxyReq: function(proxyReq, req, res) {
+                    proxyReq.setHeader('Authorization', `token ${secret}`);
+                }
             })
-        }
-        if (req.method !== "GET" && req.method !== "DELETE" && req.method !== "HEAD" && req.method !== "OPTIONS") {
-            options.body = JSON.stringify(req.body);
-        }
-        fetch(`${service.url}${req.url.split('/').slice(2).join('/')}`, options)
-        .then(response => {           
-            return {status: response.status, body: response.json(), headers: response.headers};
-        })
-        .then(async data => {
-            res.set(Object.fromEntries(data.headers));
-            if (data.headers.has('transfer-encoding')) {
-                res.header('transfer-encoding', '');
-            }
-            res.status(data.status).send(await data.body)
-        })
-    } else {
-        res.status(400).send({error: 'Secret or service not found'});
-    }
-});
+          );
+    })
 
-app.listen(process.env.PORT, () => {
-    console.log(`App listening on port ${process.env.PORT}`);
-});
+    /* app.use(
+        `/github`,
+        createProxyMiddleware({
+            secure: false,
+            target: 'https://api.github.com',
+            changeOrigin: true,
+            pathRewrite: {
+                [`^/github`]: '',
+            },
+            onProxyReq: async function(proxyReq, req, res) {
+                proxyReq.setHeader('Authorization', `token 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`);
+            }
+        })
+      ); */
+
+    app.listen(process.env.PORT, () => {
+        console.log(`App listening on port ${process.env.PORT}`);
+    });
+
+})();

@@ -19,7 +19,7 @@ Service.insertMany([
         }
     },
     {
-        "need_auth": true,
+        "need_auth": false,
         "id": "301c86b8-f931-41de-a6b7-3d4987552883",
         "name": "aws",
         "url": "https://api.aws.com/",
