@@ -43,7 +43,6 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
     
     service.forEach(async service => {
         const secret = await get_secret(service)
-        console.log(secret)
         app.use(
             `/${service.name}`,
             createProxyMiddleware({
