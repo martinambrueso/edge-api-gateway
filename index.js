@@ -60,21 +60,6 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
           );
     })
 
-    /* app.use(
-        `/github`,
-        createProxyMiddleware({
-            secure: false,
-            target: 'https://api.github.com',
-            changeOrigin: true,
-            pathRewrite: {
-                [`^/github`]: '',
-            },
-            onProxyReq: async function(proxyReq, req, res) {
-                proxyReq.setHeader('Authorization', `token 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`);
-            }
-        })
-      ); */
-
     app.listen(process.env.PORT, () => {
         console.log(`App listening on port ${process.env.PORT}`);
     });
